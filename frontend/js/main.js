@@ -34,50 +34,52 @@ async function carregarlista() {
 }
 
 // Enviar formulário (criar ou atualizar)
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  const nome = document.getElementById('nome').value.trim();
-  const marca = document.getElementById('marca').value.trim();
-  const quantidade = document.getElementById('quantidade').value.trim();
+    const nome = document.getElementById('nome').value.trim();
+    const marca = document.getElementById('marca').value.trim();
+    const quantidade = document.getElementById('quantidade').value.trim();
 
-  if (!nome) {
-    alert('O nome é obrigatório');
-    return;
-  }
-
-  const lista = { nome, marca, quantidade };
-
-  try {
-    let resposta;
-    if (idEditando) {
-      resposta = await fetch(`${API_URL}/lista/${idEditando}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(lista)
-      });
-    } else {
-      resposta = await fetch(`${API_URL}/lista`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(lista)
-      });
+    if (!nome) {
+      alert('O nome é obrigatório');
+      return;
     }
 
-    if (!resposta.ok) {
-      const erro = await resposta.json();
-      throw new Error(erro.mensagem || 'Erro desconhecido');
+    const lista = { nome, marca, quantidade };
+
+    try {
+      let resposta;
+      if (idEditando) {
+        resposta = await fetch(`${API_URL}/lista/${idEditando}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(lista)
+        });
+      } else {
+        resposta = await fetch(`${API_URL}/lista`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(lista)
+        });
+      }
+
+      if (!resposta.ok) {
+        const erro = await resposta.json();
+        throw new Error(erro.mensagem || 'Erro desconhecido');
+      }
+
+      alert(idEditando ? 'Lista atualizada!' : 'Lista criada!');
+      idEditando = null;
+      form.reset();
+      carregarlista();
+
+    } catch (error) {
+      alert('Erro ao salvar lista: ' + error.message);
     }
-
-    alert(idEditando ? 'Lista atualizada!' : 'Lista criada!');
-    idEditando = null;
-    form.reset();
-    carregarlista();
-
-  } catch (error) {
-    alert('Erro ao salvar lista: ' + error.message);
-  }
-});
+  });
+}
 
 // Excluir lista
 async function excluirLista(id) {
