@@ -7,16 +7,9 @@ const {
   deletarLista
 } = require('../controllers/alimentosController');
 
-// Rota POST - Criar Lista
-router.post('/Listas', criarLista);
-
-// Rota GET - Listar todos os Listas
-router.get('/Listas', listarLista);
-
-// Rota PUT - Atualizar Lista por ID
-router.put('/Listas/:id', atualizarLista);
-
-// Rota DELETE - Excluir Lista por ID
-router.delete('/Listas/:id', deletarLista);
+router.get('/', listarLista); // equivale a /lista
+router.post('/', criarLista); // equivale a /lista
+router.put('/:id', atualizarLista); // equivale a /lista/:id
+router.delete('/:id', deletarLista); // equivale a /lista/:id
 
 module.exports = router;

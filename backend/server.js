@@ -10,8 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 // Rotas
-const contatoRoutes = require('./routers/alimentoRoutes');
-app.use('/api', contatoRoutes);
+const alimentoRoutes = require('./routers/alimentoRoutes');
+app.use('/lista', alimentoRoutes);
 
 // Conexão com MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Rota de teste
 app.get('/', (req, res) => {
-  res.send('API funcionando com sucesso!');
+  res.send('lista funcionando com sucesso!');
 });
 
 // Iniciar servidor

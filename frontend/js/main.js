@@ -3,26 +3,26 @@ const API_URL = 'https://listacompras-kraz.onrender.com';
 const form = document.getElementById('form-lista');
 const tabela = document.getElementById('tabela-lista');
 
-let idEditando = null; // Para controlar se está editando
+let idEditando = null;
 
 // Carregar lista
 async function carregarlista() {
   try {
-    const resposta = await fetch(`${API_BASE_URL}/lista`);
+    const resposta = await fetch(`${API_URL}/lista`);
     const lista = await resposta.json();
 
     tabela.innerHTML = '';
 
-    lista.forEach(lista => {
+    lista.forEach(item => {
       const linha = document.createElement('tr');
 
       linha.innerHTML = `
-        <td>${lista.nome}</td>
-        <td>${lista.email || ''}</td>
-        <td>${lista.telefone || ''}</td>
+        <td>${item.nome}</td>
+        <td>${item.marca || ''}</td>
+        <td>${item.quantidade || ''}</td>
         <td>
-          <button class="editar" onclick="editarLista('${lista._id}')">Editar</button>
-          <button class="excluir" onclick="excluirLista('${lista._id}')">Excluir</button>
+          <button class="editar" onclick="editarLista('${item._id}')">Editar</button>
+          <button class="excluir" onclick="excluirLista('${item._id}')">Excluir</button>
         </td>
       `;
 
@@ -38,8 +38,8 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const nome = document.getElementById('nome').value.trim();
-  const email = document.getElementById('marca').value.trim();
-  const telefone = document.getElementById('quantidade').value.trim();
+  const marca = document.getElementById('marca').value.trim();
+  const quantidade = document.getElementById('quantidade').value.trim();
 
   if (!nome) {
     alert('O nome é obrigatório');
@@ -51,14 +51,14 @@ form.addEventListener('submit', async (e) => {
   try {
     let resposta;
     if (idEditando) {
-      resposta = await fetch(`${API_BASE_URL}/lista/${idEditando}`, {
+      resposta = await fetch(`${API_URL}/api/lista/${idEditando}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(lista)
       });
     } else {
-      resposta = await fetch(`${API_BASE_URL}/lista`, {
-        method: 'GET',
+      resposta = await fetch(`${API_URL}/lista`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(lista)
       });
@@ -84,13 +84,13 @@ async function excluirLista(id) {
   if (!confirm('Deseja realmente excluir essa lista?')) return;
 
   try {
-    const resposta = await fetch(`${API_BASE_URL}/lista/${id}`, {
+    const resposta = await fetch(`${API_URL}/lista/${id}`, {
       method: 'DELETE'
     });
 
     if (!resposta.ok) throw new Error('Falha ao excluir');
 
-    alert('Lista excluído!');
+    alert('Lista excluída!');
     carregarlista();
   } catch (error) {
     alert('Erro ao excluir lista: ' + error.message);
@@ -100,18 +100,18 @@ async function excluirLista(id) {
 // Editar lista
 async function editarLista(id) {
   try {
-    const resposta = await fetch(`${API_BASE_URL}/lista`);
-    const Lista = await resposta.json();
+    const resposta = await fetch(`${API_URL}/lista`);
+    const listas = await resposta.json();
 
-    const lista = lista.find(c => c._id === id);
+    const lista = listas.find(c => c._id === id);
     if (!lista) {
-      alert('Lista não encontrado');
+      alert('Lista não encontrada');
       return;
     }
 
     document.getElementById('nome').value = lista.nome;
-    document.getElementById('email').value = lista.email;
-    document.getElementById('telefone').value = lista.telefone;
+    document.getElementById('marca').value = lista.marca;
+    document.getElementById('quantidade').value = lista.quantidade;
 
     idEditando = id;
 
