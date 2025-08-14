@@ -25,8 +25,8 @@ const listarLista = async (req, res) => {
 const atualizarLista = async (req, res) => {
   try {
     const listaAtualizada = await Lista.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!ListaAtualizado) return res.status(404).json({ mensagem: 'Lista não encontrado' });
-    res.status(200).json(ListaAtualizado);
+    if (!listaAtualizada) return res.status(404).json({ mensagem: 'Lista não encontrada' });
+    res.status(200).json(listaAtualizada);
   } catch (error) {
     res.status(400).json({ mensagem: 'Erro ao atualizar Lista', erro: error.message });
   }
