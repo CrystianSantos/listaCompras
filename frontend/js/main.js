@@ -51,7 +51,7 @@ form.addEventListener('submit', async (e) => {
   try {
     let resposta;
     if (idEditando) {
-      resposta = await fetch(`${API_URL}/api/lista/${idEditando}`, {
+      resposta = await fetch(`${API_URL}/lista/${idEditando}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(lista)
