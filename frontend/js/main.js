@@ -1,4 +1,4 @@
-const API_URL = 'https://crud-api-rfl7.onrender.com/api';
+const API_URL = 'https://listacompras-kraz.onrender.com';
 
 const form = document.getElementById('form-lista');
 const tabela = document.getElementById('tabela-lista');
